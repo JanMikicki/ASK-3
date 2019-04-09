@@ -12,6 +12,10 @@ namespace ASK_3
 {
     public partial class Form1 : Form
     {
+        Double value = 0;
+        String operation = "";
+        bool operator_clicked = false;
+
         Timer t = new Timer();
         int WIDTH = 200, HEIGHT = 200, secHAND = 90, minHAND = 80, hrHAND = 50;
 
@@ -49,6 +53,48 @@ namespace ASK_3
         {
             this.BackColor = Color.AntiqueWhite;
             this.labelDigital.ForeColor = Color.Black;
+        }
+
+        private void buttonClearEntry_Click(object sender, EventArgs e)
+        {
+            this.calcDisplay.Text = "0";
+        }
+
+        private void operator_Click(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+            operation = b.Text;
+            value = Double.Parse(this.calcDisplay.Text);
+            operator_clicked = true;
+            equation_label.Text = value + " " + operation;
+        }
+
+        private void buttonEquals_Click(object sender, EventArgs e)
+        {
+            equation_label.Text = "";
+            switch (operation)
+            {
+                case "+":
+                    this.calcDisplay.Text = (value + Double.Parse(calcDisplay.Text)).ToString();
+                    break;
+                case "-":
+                    this.calcDisplay.Text = (value - Double.Parse(calcDisplay.Text)).ToString();
+                    break;
+                case "*":
+                    this.calcDisplay.Text = (value * Double.Parse(calcDisplay.Text)).ToString();
+                    break;
+                case "/":
+                    this.calcDisplay.Text = (value / Double.Parse(calcDisplay.Text)).ToString();
+                    break;
+                default:
+                    break;
+            }            
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            this.calcDisplay.Text = "0";
+            value = 0;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -155,9 +201,14 @@ namespace ASK_3
             return coord;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button_Click(object sender, EventArgs e)
         {
+            if (this.calcDisplay.Text == "0" || operator_clicked == true)
+                this.calcDisplay.Clear();
 
+            operator_clicked = false;
+            Button b = (Button)sender;
+            this.calcDisplay.Text = this.calcDisplay.Text + b.Text;
         }
     }
 }
