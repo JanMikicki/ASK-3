@@ -15,6 +15,9 @@ namespace ASK_3
         Double value = 0;
         String operation = "";
         bool operator_clicked = false;
+        Color analog_back_color = Color.WhiteSmoke;
+        Color analog_contours = Color.Black;
+        Brush analog_number = Brushes.Black;
 
         Timer t = new Timer();
         int WIDTH = 200, HEIGHT = 200, secHAND = 90, minHAND = 80, hrHAND = 50;
@@ -24,10 +27,13 @@ namespace ASK_3
 
         Bitmap bmp;
         Graphics g;
+       
 
         public Form1()
         {
             InitializeComponent();
+            this.Text = "Calculator";
+            this.labelDate.Text = DateTime.Today.ToString("D");
         }
 
         private void cyfrowyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -42,22 +48,105 @@ namespace ASK_3
             this.labelDigital.Hide();
         }
 
-        private void blackToolStripMenuItem_Click(object sender, EventArgs e)
+        private void nightToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.BackColor = Color.Black;
+            this.BackColor = Color.FromArgb(20, 29, 38);
             this.labelDigital.ForeColor = Color.WhiteSmoke;
-           
+            this.labelDate.ForeColor = Color.WhiteSmoke;
+            this.analog_back_color = Color.FromArgb(20, 29, 38);
+
+            this.analog_contours = Color.White;
+            this.analog_number = Brushes.White;
+
+            this.labelDigital.Font = new Font("Consolas", this.labelDigital.Font.Size);
+
+            foreach (var b in this.panel1.Controls.OfType<Button>())
+            {
+                b.BackColor = Color.FromArgb(0, 191, 165);
+                b.FlatAppearance.BorderColor = Color.FromArgb(0, 121, 107);
+
+
+            }
+            foreach (var b in this.panel2.Controls.OfType<Button>())
+            {
+                b.BackColor = Color.FromArgb(36, 52, 71);
+                b.ForeColor = Color.FromArgb(189, 199, 193);
+            }
+            this.calcDisplay.BackColor = Color.FromArgb(20, 29, 38);
+            this.calcDisplay.ForeColor = Color.FromArgb(189, 199, 193);
+            this.equation_label.ForeColor = Color.FromArgb(189, 199, 193);
+
         }
 
         private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.BackColor = Color.AntiqueWhite;
+            this.BackColor = Color.WhiteSmoke;
             this.labelDigital.ForeColor = Color.Black;
+            this.labelDate.ForeColor = Color.Black;
+            this.analog_back_color = Color.WhiteSmoke;
+
+            this.analog_contours = Color.Black;
+            this.analog_number = Brushes.Black;
+
+            this.labelDigital.Font = new Font("MS Reference Sans Serif", this.labelDigital.Font.Size);
+            
+            foreach (var b in this.panel1.Controls.OfType<Button>())
+            {
+                b.BackColor = Color.Gainsboro;
+                b.FlatAppearance.BorderColor = Color.DimGray;
+                b.ForeColor = Color.Black;
+
+            }
+            foreach (var b in this.panel2.Controls.OfType<Button>())
+            {
+                b.BackColor = Color.White;
+                b.ForeColor = Color.Black;
+            }
+            this.calcDisplay.BackColor = Color.White;
+            this.calcDisplay.ForeColor = Color.Black;
+            this.equation_label.ForeColor = Color.Black;
+
+        }
+
+        private void blueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.BackColor = Color.FromArgb(0, 98, 255);
+            this.labelDigital.ForeColor = Color.Azure;
+            this.labelDate.ForeColor = Color.Azure;
+
+            this.analog_back_color = Color.FromArgb(0, 98, 255);
+            this.analog_contours = Color.Azure;
+            this.analog_number = Brushes.Azure;
+
+            this.labelDigital.Font = new Font("Arial", this.labelDigital.Font.Size);
+
+            foreach (var b in this.panel1.Controls.OfType<Button>())
+            {
+                b.BackColor = Color.FromArgb(5, 48, 173);
+                b.FlatAppearance.BorderColor = Color.MidnightBlue;
+                b.ForeColor = Color.Azure;
+
+            }
+            foreach (var b in this.panel2.Controls.OfType<Button>())
+            {
+                b.BackColor = Color.Azure;
+                b.ForeColor = Color.MidnightBlue;
+            }
+
+            this.calcDisplay.BackColor = Color.AliceBlue;
+            this.calcDisplay.ForeColor = Color.Black;
+            this.equation_label.ForeColor = Color.Azure;
         }
 
         private void buttonClearEntry_Click(object sender, EventArgs e)
         {
             this.calcDisplay.Text = "0";
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            this.calcDisplay.Text = "0";
+            value = 0;
         }
 
         private void operator_Click(object sender, EventArgs e)
@@ -91,10 +180,14 @@ namespace ASK_3
             }            
         }
 
-        private void buttonClear_Click(object sender, EventArgs e)
+        private void button_Click(object sender, EventArgs e)
         {
-            this.calcDisplay.Text = "0";
-            value = 0;
+            if (this.calcDisplay.Text == "0" || operator_clicked == true)
+                this.calcDisplay.Clear();
+
+            operator_clicked = false;
+            Button b = (Button)sender;
+            this.calcDisplay.Text = this.calcDisplay.Text + b.Text;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -107,7 +200,7 @@ namespace ASK_3
             cy = HEIGHT / 2;
 
             //backcolor
-            this.BackColor = Color.White;
+            this.BackColor = Color.WhiteSmoke;
 
             //timer
             t.Interval = 1000;      //in millisecond
@@ -128,16 +221,16 @@ namespace ASK_3
             int[] handCoord = new int[2];
 
             //clear
-            g.Clear(Color.White);
+            g.Clear(analog_back_color);
 
             //draw circle
-            g.DrawEllipse(new Pen(Color.Black, 1f), 0, 0, WIDTH, HEIGHT);
+            g.DrawEllipse(new Pen(analog_contours, 1f), 0, 0, WIDTH, HEIGHT);
 
             //draw figure
-            g.DrawString("12", new Font("Arial", 12), Brushes.Black, new PointF(90, 2));
-            g.DrawString("3", new Font("Arial", 12), Brushes.Black, new PointF(182, 90));
-            g.DrawString("6", new Font("Arial", 12), Brushes.Black, new PointF(92, 182));
-            g.DrawString("9", new Font("Arial", 12), Brushes.Black, new PointF(0, 90));
+            g.DrawString("12", new Font("Arial", 12), analog_number, new PointF(90, 2));
+            g.DrawString("3", new Font("Arial", 12), analog_number, new PointF(182, 90));
+            g.DrawString("6", new Font("Arial", 12), analog_number, new PointF(92, 182));
+            g.DrawString("9", new Font("Arial", 12), analog_number, new PointF(0, 90));
 
             //second hand
             handCoord = msCoord(ss, secHAND);
@@ -145,18 +238,15 @@ namespace ASK_3
 
             //minute hand
             handCoord = msCoord(mm, minHAND);
-            g.DrawLine(new Pen(Color.Black, 2f), new Point(cx, cy), new Point(handCoord[0], handCoord[1]));
+            g.DrawLine(new Pen(analog_contours, 2f), new Point(cx, cy), new Point(handCoord[0], handCoord[1]));
 
             //hour hand
             handCoord = hrCoord(hh % 12, mm, hrHAND);
-            g.DrawLine(new Pen(Color.Gray, 3f), new Point(cx, cy), new Point(handCoord[0], handCoord[1]));
+            g.DrawLine(new Pen(analog_contours, 3f), new Point(cx, cy), new Point(handCoord[0], handCoord[1]));
 
             //load bmp in picturebox1
             pictureBoxAnalog.Image = bmp;
-
-            //disp time
-            this.Text = "Analog Clock -  " + hh + ":" + mm + ":" + ss;
-
+        
             this.labelDigital.Text = DateTime.Now.ToString("T");
             //dispose
             g.Dispose();
@@ -200,15 +290,6 @@ namespace ASK_3
             }
             return coord;
         }
-
-        private void button_Click(object sender, EventArgs e)
-        {
-            if (this.calcDisplay.Text == "0" || operator_clicked == true)
-                this.calcDisplay.Clear();
-
-            operator_clicked = false;
-            Button b = (Button)sender;
-            this.calcDisplay.Text = this.calcDisplay.Text + b.Text;
-        }
+       
     }
 }
