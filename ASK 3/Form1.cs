@@ -27,7 +27,7 @@ namespace ASK_3
 
         Bitmap bmp;
         Graphics g;
-       
+
 
         public Form1()
         {
@@ -89,7 +89,7 @@ namespace ASK_3
             this.analog_number = Brushes.Black;
 
             this.labelDigital.Font = new Font("MS Reference Sans Serif", this.labelDigital.Font.Size);
-            
+
             foreach (var b in this.panel1.Controls.OfType<Button>())
             {
                 b.BackColor = Color.Gainsboro;
@@ -153,7 +153,8 @@ namespace ASK_3
         {
             Button b = (Button)sender;
             operation = b.Text;
-            value = Double.Parse(this.calcDisplay.Text);
+            try { value = Double.Parse(this.calcDisplay.Text); }
+            catch(Exception asd) { MessageBox.Show(asd.Message); }
             operator_clicked = true;
             equation_label.Text = value + " " + operation;
         }
@@ -161,23 +162,27 @@ namespace ASK_3
         private void buttonEquals_Click(object sender, EventArgs e)
         {
             equation_label.Text = "";
-            switch (operation)
+            try
             {
-                case "+":
-                    this.calcDisplay.Text = (value + Double.Parse(calcDisplay.Text)).ToString();
-                    break;
-                case "-":
-                    this.calcDisplay.Text = (value - Double.Parse(calcDisplay.Text)).ToString();
-                    break;
-                case "*":
-                    this.calcDisplay.Text = (value * Double.Parse(calcDisplay.Text)).ToString();
-                    break;
-                case "/":
-                    this.calcDisplay.Text = (value / Double.Parse(calcDisplay.Text)).ToString();
-                    break;
-                default:
-                    break;
-            }            
+                switch (operation)
+                {
+                    case "+":
+                        this.calcDisplay.Text = (value + Double.Parse(calcDisplay.Text)).ToString();
+                        break;
+                    case "-":
+                        this.calcDisplay.Text = (value - Double.Parse(calcDisplay.Text)).ToString();
+                        break;
+                    case "*":
+                        this.calcDisplay.Text = (value * Double.Parse(calcDisplay.Text)).ToString();
+                        break;
+                    case "/":
+                        this.calcDisplay.Text = (value / Double.Parse(calcDisplay.Text)).ToString();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch(Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         private void button_Click(object sender, EventArgs e)
@@ -246,7 +251,7 @@ namespace ASK_3
 
             //load bmp in picturebox1
             pictureBoxAnalog.Image = bmp;
-        
+
             this.labelDigital.Text = DateTime.Now.ToString("T");
             //dispose
             g.Dispose();
@@ -269,7 +274,7 @@ namespace ASK_3
             }
             return coord;
         }
-        
+
         private int[] hrCoord(int hval, int mval, int hlen)
         {
             int[] coord = new int[2];
@@ -290,6 +295,25 @@ namespace ASK_3
             }
             return coord;
         }
-       
+      
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.C))
+            {
+                if (this.pictureBoxAnalog.Visible)
+                {
+                    this.pictureBoxAnalog.Hide();
+                    this.labelDigital.Show();
+                }
+                else
+                {
+                    this.pictureBoxAnalog.Show();
+                    this.labelDigital.Hide();
+                }
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
 }

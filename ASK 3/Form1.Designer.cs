@@ -299,7 +299,6 @@
             this.calcDisplay.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calcDisplay.Location = new System.Drawing.Point(39, 59);
             this.calcDisplay.Name = "calcDisplay";
-            this.calcDisplay.ReadOnly = true;
             this.calcDisplay.Size = new System.Drawing.Size(298, 40);
             this.calcDisplay.TabIndex = 16;
             this.calcDisplay.TabStop = false;
@@ -505,6 +504,7 @@
             this.Controls.Add(this.calcDisplay);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Calculator";
